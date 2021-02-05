@@ -1,13 +1,20 @@
 import sys
 
+# CONSTANTS. Change these for input output dirs
+# =========================================
+INPUT_DIR = "wiki/"
+OUTPUT_DIR = "bin/"
+# =========================================
+
 if len(sys.argv) < 2:
   print("Please specify the files to rebuild.")
   exit()
 
 for i in list(sys.argv)[1:]:
   print("Transpiling " + i)
+  i = INPUT_DIR + i
   with open(i if i.endswith(".md") else (i + ".md")) as source:
-    md = f.read().splitlines()
+    md = source.read().splitlines()
   html = []
   
   for line in md:
