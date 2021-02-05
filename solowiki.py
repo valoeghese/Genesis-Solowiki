@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 # CONSTANTS. Change these for input output dirs
 # =========================================
@@ -12,8 +12,8 @@ if len(sys.argv) < 2:
 
 for i in list(sys.argv)[1:]:
   print("Transpiling " + i)
-  i = INPUT_DIR + i
-  with open(i if i.endswith(".md") else (i + ".md")) as source:
+  input = INPUT_DIR + i
+  with open(input if input.endswith(".md") else (input + ".md")) as source:
     md = source.read().splitlines()
   html = ""
   
@@ -26,12 +26,22 @@ for i in list(sys.argv)[1:]:
     elif (sline.startswith("##")):
       html += ("<h2>" + sline[2:].strip() + "</h3>")
     elif (sline.startswith("#")):
-      html += ("<h1>" + sline[1:],strip() + "</h1>")
+      html += ("<h1>" + sline[1:].strip() + "</h1>")
     else:
       html += ("<p>" + sline+ "</p>")
       
+  post = OUTPUT_DIR + "e/r/c" + (i[:-3] if i.endswith(".md") else i) + ".html"
+  postc = ""
+  for j in post.split("/")[:-1]:
+    postc += "/" + j
+  postc = postc[1:]
   
-  bin = open(OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html", "w+")
+  try:
+    os.makedirs(postc)
+  except FileExistsError:
+    pass
+  
+  bin = open(post, "w+")
   bin.write(html)
   bin.close()
   
