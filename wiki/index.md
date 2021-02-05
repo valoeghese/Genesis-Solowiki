@@ -1,4 +1,4 @@
-# Main Page
+Main Page
 
 It loads!
 

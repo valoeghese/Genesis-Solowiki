@@ -54,23 +54,24 @@ for i in list(sys.argv)[1:]:
   print("- Transpiling " + i)
   loadBase()
 
-  html = base0
+  html = base0 + "<h1 id=\"title\">" + md[0] + "</h1>" + "\n"
   
-  for line in md:
+  for line in md[1:]:
     sline = line.strip()
     
     if line == "":
+      html += baseI + "<br/>\n"
       continue # yes I am abusing continue statement deal with it
     
     # basic stuff will be done better with tokens later
     if (sline.startswith("###")):
-      html += ("<h3>" + sline[3:].strip() + "</h3>")
+      html += baseI + ("<h3>" + sline[3:].strip() + "</h3>")
     elif (sline.startswith("##")):
-      html += ("<h2>" + sline[2:].strip() + "</h3>")
+      html += baseI + ("<h2>" + sline[2:].strip() + "</h3>")
     elif (sline.startswith("#")):
-      html += ("<h1>" + sline[1:].strip() + "</h1>")
+      html += baseI + ("<h1>" + sline[1:].strip() + "</h1>")
     else:
-      html += ("<p>" + sline+ "</p>")
+      html += baseI + ("<p>" + sline+ "</p>")
     html += "\n"
   html += baseF
       
