@@ -15,19 +15,23 @@ for i in list(sys.argv)[1:]:
   i = INPUT_DIR + i
   with open(i if i.endswith(".md") else (i + ".md")) as source:
     md = source.read().splitlines()
-  html = []
+  html = ""
   
   for line in md:
     sline = line.strip()
     
     # basic stuff will be done better with tokens later
     if (sline.startswith("###")):
-      html.append("<h3>" + sline[3:].strip() + "</h3>")
+      html += ("<h3>" + sline[3:].strip() + "</h3>")
     elif (sline.startswith("##")):
-      html.append("<h2>" + sline[2:].strip() + "</h3>")
+      html += ("<h2>" + sline[2:].strip() + "</h3>")
     elif (sline.startswith("#")):
-      html.append("<h1>" + sline[1:],strip() + "</h1>")
+      html += ("<h1>" + sline[1:],strip() + "</h1>")
     else:
-      html.append("<p>" + sline+ "</p>")
+      html += ("<p>" + sline+ "</p>")
       
-  print(html[0])
+  
+  bin = open(OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html", "w+")
+  bin.write(html)
+  bin.close()
+  
