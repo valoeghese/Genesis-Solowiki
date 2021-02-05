@@ -23,5 +23,5 @@ for i in list(sys.argv)[1:]:
     else:
       html.append("<p>" + sline+ "</p>")
       
-    git commit -m "loop thingy arguments brr"
+    
     
