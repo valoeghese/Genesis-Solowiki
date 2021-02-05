@@ -5,4 +5,5 @@ if len(sys.argv) < 2:
   exit()
 
 for i in list(sys.argv)[1:]:
-  print(i)
+  print("Transpiling " + i)
+  
