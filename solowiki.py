@@ -25,10 +25,12 @@ def loadBase():
   if loadedBase:
     pass
   else:
-    print("Loading template base.html")
+    print("- Loading template base.html")
+    loadedBase = True
     with open("base.html") as baseSource:
       data = baseSource.read().split("<!--INJHERE-->")
-      #data.split(
+      base0 = data[0]
+      baseF = data[1]
 
 for i in list(sys.argv)[1:]:
   print("Resolving " + i)
@@ -50,11 +52,15 @@ for i in list(sys.argv)[1:]:
     continue
   
   print("- Transpiling " + i)
+  loadBase()
 
-  html = ""
+  html = base0
   
   for line in md:
     sline = line.strip()
+    
+    if line == "":
+      continue # yes I am abusing continue statement deal with it
     
     # basic stuff will be done better with tokens later
     if (sline.startswith("###")):
@@ -65,6 +71,8 @@ for i in list(sys.argv)[1:]:
       html += ("<h1>" + sline[1:].strip() + "</h1>")
     else:
       html += ("<p>" + sline+ "</p>")
+    html += "\n"
+  html += baseF
       
   post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
   postc = ""
