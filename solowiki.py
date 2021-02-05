@@ -11,10 +11,26 @@ if len(sys.argv) < 2:
   exit()
 
 for i in list(sys.argv)[1:]:
-  print("Transpiling " + i)
+  print("Resolving " + i)
   input = INPUT_DIR + i
-  with open(input if input.endswith(".md") else (input + ".md")) as source:
-    md = source.read().splitlines()
+  try:
+    with open(input if input.endswith(".md") else (input + ".md")) as source:
+      md = source.read().splitlines()
+  except FileNotFoundError:
+    print("Markdown Source not found.")
+
+    post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
+    if os.path.exists(post):
+      a = input("Bin HTML file found. Permanently Delete file? [Y/N] ")
+      if (a.upper() == "Y"):
+        os.remove(post)
+      print("Deleted file.")
+    else:
+      print("Bin does not exist, cannot act on the given file.")
+    continue
+  
+  print("Transpiling " + i)
+
   html = ""
   
   for line in md:
@@ -30,7 +46,7 @@ for i in list(sys.argv)[1:]:
     else:
       html += ("<p>" + sline+ "</p>")
       
-  post = OUTPUT_DIR + "e/r/c" + (i[:-3] if i.endswith(".md") else i) + ".html"
+  post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
   postc = ""
   for j in post.split("/")[:-1]:
     postc += "/" + j
