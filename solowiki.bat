@@ -1,2 +1,2 @@
 @echo off
-python solowiki.py
+python solowiki.py %*
