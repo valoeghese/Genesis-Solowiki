@@ -16,7 +16,7 @@ if len(sys.argv) < 2:
 loadedBase = False
 base0 = None
 baseF = None
-baseI = "      "
+baseI = "          "
 nextI = "  "
 
 def loadBase():
