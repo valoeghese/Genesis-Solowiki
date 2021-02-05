@@ -22,12 +22,12 @@ for i in list(sys.argv)[1:]:
     
     # basic stuff will be done better with tokens later
     if (sline.startswith("###")):
-      html.append("<h3>" + sline[3:] + "</h3>")
+      html.append("<h3>" + sline[3:].strip() + "</h3>")
     elif (sline.startswith("##")):
-      html.append("<h2>" + sline[2:] + "</h3>")
+      html.append("<h2>" + sline[2:].strip() + "</h3>")
     elif (sline.startswith("#")):
-      html.append("<h1>" + sline[1:] + "</h1>")
+      html.append("<h1>" + sline[1:],strip() + "</h1>")
     else:
       html.append("<p>" + sline+ "</p>")
       
-    print(html[0])
+  print(html[0])
