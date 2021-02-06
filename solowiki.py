@@ -72,7 +72,7 @@ RESET = Token("/R", False, None, None)
 headers = [HEADER, SUBHEADER, SUBHEADER_2, SUBHEADER_3, QUOTE, PARAHEADER]
 wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
 simple = [BREAK, LINK_START, LINK_MID, LINK_END]
-tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "> ": QUOTE, "\"": INLINE_QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap
@@ -161,6 +161,9 @@ for i in list(sys.argv)[1:]: # for each provided file
       line = line[2:]
     elif line.startswith("#"):
       tokens.append(HEADER)
+      line = line[1:]
+    elif line.startswith(">"):
+      tokens.append(QUOTE)
       line = line[1:]
     else:
       tokens.append(PARAHEADER)
