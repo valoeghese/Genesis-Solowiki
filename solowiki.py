@@ -85,12 +85,18 @@ for i in list(sys.argv)[1:]: # for each provided file
   
   html = base0Split[0] + metadata[1].strip() + base0Split[1] + "<h1 id=\"title\">" + metadata[0].strip() + "</h1>" + "\n"
   
+  newLines = False
+  
   for line in md[1:]:
     sline = line.strip()
     
     if line == "":
-      html += baseI + "<br/>\n"
+      if newLines:
+        html += baseI + "<br/>\n"
+      newLines = True
       continue # yes I am abusing continue statement deal with it
+    else:
+      newLines = False
     
     # basic stuff will be done better with tokens later
     if (sline.startswith("###")):
