@@ -196,11 +196,7 @@ for i in list(sys.argv)[1:]: # for each provided file
   html += baseI
   
   # Iterate over tokens
-  wasLe = False
   for token in tokens:
-    if wasLe and token == LINK_END:
-      print("glee")
-    wasLe = token == LINK_END
     if token.text:
       html += token.data
     elif token in headers:
