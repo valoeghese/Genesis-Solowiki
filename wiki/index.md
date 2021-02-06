@@ -19,6 +19,6 @@ This sentence is on a new paragraph. It contains ''__**"nested"**__'' stuff. It 
 
 Why
 
-!{logo.png|Logo} This is an image.
+!{logo.png|Logo|20%} This is an image. It has also been resized.
 
 {otherpage.html|!{logo.png|Logo}} This is an image link. You can only nest this as an image within a link.

@@ -195,7 +195,12 @@ for i in list(sys.argv)[1:]: # for each provided file
   
   html += baseI
   
+  # Iterate over tokens
+  wasLe = False
   for token in tokens:
+    if wasLe and token == LINK_END:
+      print("glee")
+    wasLe = token == LINK_END
     if token.text:
       html += token.data
     elif token in headers:
@@ -215,13 +220,21 @@ for i in list(sys.argv)[1:]: # for each provided file
         html += token.opener
         effects[token] = True
     elif token in simple:
-      html += token.getSimpleTag(effects) # This method can be overrided. It is considered simple because it is a single tag, even if it changes on condition. Other tokens have a pair of tags.
-      
-      # Toggle Image Flag
-      if token == IMAGE_START:
-        effects[1] = True
-      elif effects.get(1, False) and token == LINK_END:
-        effects[1] = False
+      if effects.get(2, False): # not so simple now I guess. This is for image size stuff
+        html += "\" width=\""
+        effects[2] = False
+      else:
+        html += token.getSimpleTag(effects) # This method can be overrided. It is considered simple because it is a single tag, even if it changes on condition. Other tokens have a pair of tags.
+
+        # Toggle Image Flag
+        if token == IMAGE_START:
+          effects[1] = True
+        elif effects.get(1, False):
+          if token == LINK_END:
+            effects[1] = False
+            effects[2] = False
+          elif token == LINK_MID:
+            effects[2] = True
     
   
   # Finalise
