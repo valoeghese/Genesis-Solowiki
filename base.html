@@ -4,6 +4,19 @@
     <title>Wiki</title>
 	<meta charset="UTF-8"/>
     <style>
+	  body {
+        background-color: #f2f2f2;
+		overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      #body {
+        border: 1px solid #a7d7f7;
+        margin-left: 10%;
+        margin-top: 5%;
+        display: block;
+		background-color: #ffffff;
+		font-family: sans-serif;
+      }
 	  #wikiname {
 	    position: absolute;
 		margin-left: 10%;
@@ -14,21 +27,17 @@
       #logo {
         position: absolute;
       }
-      #body {
-        border: 1px solid #a7d7f7;
-        margin-left: 10%;
-        margin-top: 5%;
-        display: block;
-		background-color: #ffffff;
-		font-family: sans-serif;
-      }
-	  #title {
-	    font-family: serif;
-		border-bottom: 1px solid #a0a0a0;
-		font-size: 32px;
-	  }
 	  #wikitext {
 	    margin-left: 1%;
+		margin-right: 5%;
+	  }
+	  #wikitext h1 {
+	    border-bottom: 1px solid #a0a0a0;
+		font-family: serif;
+		font-size: 25px;
+	  }
+	  #title h1 {
+		font-size: 32px;
 	  }
 	  .quote {
 	    border-left: 3px solid #eaeaea;
@@ -36,14 +45,9 @@
 		padding-top: 1%;
 		padding-bottom: 1%;
 	  }
-      body {
-        background-color: #f2f2f2;
-		overflow-y: scroll;
-        overflow-x: hidden;
-      }
     </style>
   </head>
-  <body style="position:absolute; width:100%">
+  <body style="position:fixed; width:100%">
     <img id="logo" src="logo.png" width = "8%">
 	<p id="wikiname"><!--WIKINAMEHERE--></p>
     <div id="body">
