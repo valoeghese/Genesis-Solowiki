@@ -83,7 +83,7 @@ for i in list(sys.argv)[1:]: # for each provided file
   if len(metadata) == 1:
     metadata.append("Unnamed Solowiki")
   
-  html = base0Split[0] + metadata[1] + base0Split[1] + "<h1 id=\"title\">" + metadata[0] + "</h1>" + "\n"
+  html = base0Split[0] + metadata[1].strip() + base0Split[1] + "<h1 id=\"title\">" + metadata[0].strip() + "</h1>" + "\n"
   
   for line in md[1:]:
     sline = line.strip()
