@@ -16,7 +16,7 @@ if len(sys.argv) < 2:
 loadedBase = False
 base0 = None
 baseF = None
-baseI = "          "
+baseI = "        "
 nextI = "  "
 
 def loadBase():
@@ -25,7 +25,7 @@ def loadBase():
   if loadedBase:
     pass
   else:
-    print("- Loading template base.html")
+    print("--- Loading template base.html")
     loadedBase = True
     with open("base.html") as baseSource:
       data = baseSource.read().split("<!--INJHERE-->")
@@ -61,17 +61,18 @@ PARAHEADER = Token("/P", False, "<p>", "</p>")
 BOLD = Token("/B", False, "<b>", "</b>")
 ITALIC = Token("/I", False, "<i>", "</i>")
 UNDERLINE = Token("/U", False, "<u>", "</u>")
-QUOTE = Token("/BQ", False, "<q>", "</q>")
+QUOTE = Token("/BQ", False, "<div class=\"quote\"><q>", "</q></div>")
+INLINE_QUOTE = Token("/IQ", False, "<q>", "</q>")
 LINK_START = Token("/LS", False, "<a href=\"", None)
 LINK_MID = Token("/LM", False, "\">", None)
 LINK_END = Token("/LE", False, "</a>", None)
 BREAK = Token("/NL", False, "<br/>", None)
 RESET = Token("/R", False, None, None)
 
-headers = [HEADER, SUBHEADER, SUBHEADER_2, SUBHEADER_3, QUOTE]
-wrappers = [BOLD, ITALIC, UNDERLINE]
+headers = [HEADER, SUBHEADER, SUBHEADER_2, SUBHEADER_3, QUOTE, PARAHEADER]
+wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
 simple = [BREAK, LINK_START, LINK_MID, LINK_END]
-tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "> ": QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "> ": QUOTE, "\"": INLINE_QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap

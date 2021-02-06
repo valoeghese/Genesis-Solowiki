@@ -30,19 +30,25 @@
 	  #wikitext {
 	    margin-left: 1%;
 	  }
+	  .quote div {
+	    background-color: #f2f2f2
+		border-left: 2px solid #f2f2f2;
+		font-color: #3a3a3a
+	  }
       body {
         background-color: #f2f2f2;
+		overflow-y: scroll;
+        overflow-x: hidden;
       }
     </style>
   </head>
-  <body>
-    <div style="position:absolute; width: 100%;">
-      <img id="logo" src="logo.png" width = "8%">
-	  <p id="wikiname"><!--WIKINAMEHERE--></p>
-      <div id="body">
-        <div id="wikitext">
-          <!--INJHERE-->
-        </div>
+  <body style="position:absolute; width:100%">
+    <img id="logo" src="logo.png" width = "8%">
+	<p id="wikiname"><!--WIKINAMEHERE--></p>
+    <div id="body">
+      <div id="wikitext">
+        <!--INJHERE-->
+	     <hr/>
       </div>
     </div>
   </body>
