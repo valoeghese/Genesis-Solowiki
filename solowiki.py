@@ -189,12 +189,13 @@ for i in list(sys.argv)[1:]: # for each provided file
         if effects.get(hd, False):
           html += hd.closer
           effects[hd] = False
+      html += "\n" + baseI
     elif token in wrappers:
       if effects.get(token, False):
-        html += token.opener
+        html += token.closer
         effects[token] = False
       else:
-        html += token.closer
+        html += token.opener
         effects[token] = True
     elif token in simple:
       html += token.tag
