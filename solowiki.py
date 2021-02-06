@@ -48,7 +48,7 @@ for i in list(sys.argv)[1:]: # for each provided file
   inpt = INPUT_DIR + i
   try:
     mdFile = inpt.endswith(".md")
-    if ("." in input and not mdFile): # if an asset
+    if "." in inpt and not mdFile: # if an asset
       print("- File discovered to likely be an asset.")
       # asset nonsense
       if (os.path.exists(inpt)):
