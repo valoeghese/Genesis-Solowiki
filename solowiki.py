@@ -43,8 +43,33 @@ def missingDirs(post): # create missing directories
   except FileExistsError:
     pass
 
+class Token:
+  def __init__(self, dat, istext):
+    self.data = data
+    self.text = istext
+
+HEADER = Token("/H1", False)
+SUBHEADER = Token("/H2", False)
+SUBHEADER_2 = Token("/H3", False)
+SUBHEADER_3 = Token("/H4", False)
+BOLD = Token("/B", False)
+ITALIC = Token("/I", False)
+QUOTE = Token("/BQ", False)
+LINK_START = Token("/LS", False)
+LINK_MID = Token("/LM", False)
+LINK_END = Token("/LE", False)
+BREAK = Token("/NL", False)
+HTML_NEWLINE = Token("/HNL", False)
+
+tokenmap = {"# ": HEADER, "## ": SUBHEADER, "### ": SUBHEADER_2, "#### ": SUBHEADER_3, "**": BOLD, "''": ITALIC, "> ": QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
+
 def processToken(currentRun, tokenList):
-  pass
+  global tokenmap
+  if currentRun in tokenmap:
+    tokenList.append(tokenmap[currentRun]
+    return True
+  else:
+    return False
 
 for i in list(sys.argv)[1:]: # for each provided file
   print("Resolving " + i)
@@ -98,7 +123,7 @@ for i in list(sys.argv)[1:]: # for each provided file
     
     if line == "":
       if newLines:
-        tokens.append("/NL") # NewLine
+        tokens.append(BREAK)
       newLines = True
       continue # yes I am abusing continue statement deal with it
     else:
@@ -114,10 +139,12 @@ for i in list(sys.argv)[1:]: # for each provided file
     if run != "":
       processToken(run, tokens)
     
-    tokens.append("/HNL") # Html NewLine
+    tokens.append(HTML_NEWLINE)
 
   # Parse Tokens into HTML
   print("--- Parsing to HTML")
+  
+  # Finalise
   html += baseF
       
   post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
