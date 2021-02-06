@@ -2,7 +2,7 @@ Main Page | Genesis Solowiki
 
 It loads!
 
-So # epic lol **it _w_o*ks* ** e
+So # epic lol **it __w__o*ks* ** e
 
 # > epic
 

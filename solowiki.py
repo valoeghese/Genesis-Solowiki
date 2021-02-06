@@ -44,32 +44,51 @@ def missingDirs(post): # create missing directories
     pass
 
 class Token:
-  def __init__(self, dat, istext):
+  def __init__(self, dat, istext, opener, closer):
     self.data = data
     self.text = istext
+    if closer == None:
+      self.tag = opener
+    else:
+      self.opener = opener
+      self.closer = closer
 
-HEADER = Token("/H1", False)
-SUBHEADER = Token("/H2", False)
-SUBHEADER_2 = Token("/H3", False)
-SUBHEADER_3 = Token("/H4", False)
-BOLD = Token("/B", False)
-ITALIC = Token("/I", False)
-QUOTE = Token("/BQ", False)
-LINK_START = Token("/LS", False)
-LINK_MID = Token("/LM", False)
-LINK_END = Token("/LE", False)
-BREAK = Token("/NL", False)
-HTML_NEWLINE = Token("/HNL", False)
+HEADER = Token("/H1", False, "<h1>", "</h1>")
+SUBHEADER = Token("/H2", False, "<h2>", "</h2>")
+SUBHEADER_2 = Token("/H3", False, "<h3>", "</h3>")
+SUBHEADER_3 = Token("/H4", False, "<h4>", "</h4>")
+BOLD = Token("/B", False, "<b>", "</b>")
+ITALIC = Token("/I", False, "<i>", "</i>")
+UNDERLINE = Token("/U", False, "<u>", "</u>")
+QUOTE = Token("/BQ", False, "<q>", "</q>")
+LINK_START = Token("/LS", False, "<a href=\"", None)
+LINK_MID = Token("/LM", False, "\">", None)
+LINK_END = Token("/LE", False, "</a>", None)
+BREAK = Token("/NL", False, "<br/>", None)
+RESET = Token("/R", False, None, None)
 
-tokenmap = {"# ": HEADER, "## ": SUBHEADER, "### ": SUBHEADER_2, "#### ": SUBHEADER_3, "**": BOLD, "''": ITALIC, "> ": QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
+headers = [HEADER, SUBHEADER, SUBHEADER_2, SUBHEADER_3, QUOTE]
+wrappers = [BOLD, ITALIC, UNDERLINE]
+simple = [BREAK, LINK_START, LINK_MID, LINK_END]
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "> ": QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
-def processToken(currentRun, tokenList):
+def processToken(currentRun, tokenList, forceToken):
   global tokenmap
   if currentRun in tokenmap:
     tokenList.append(tokenmap[currentRun]
     return True
   else:
+    for tokenkey in tokenmap:
+      if currentRun.endswith(tokenkey):
+        cutoffsize = len(tokenkey)
+        tokenList.append(Token(tokenkey[:-cutoffsize], True)) # add preceding text
+        tokenList.append(tokenmap[tokenkey]) # add token
+        return True
+    if forceToken: # if force token make a text token
+      tokenList.append(Token(currentRun, True))
+      return True
     return False
+
 
 for i in list(sys.argv)[1:]: # for each provided file
   print("Resolving " + i)
@@ -119,7 +138,7 @@ for i in list(sys.argv)[1:]: # for each provided file
   # Tokenise
   print("--- Tokenising")
   for line in md[1:]:
-    sline = line.strip()
+    line = line.strip()
     
     if line == "":
       if newLines:
@@ -129,20 +148,55 @@ for i in list(sys.argv)[1:]: # for each provided file
     else:
       newLines = False
     
+    if line.startswith("####"):
+      tokens.append(SUBHEADER_3)
+      line = line[4:]
+    elif line.startswith("###"):
+      tokens.append(SUBHEADER_2)
+      line = line[3:]
+    elif line.startswith("##"):
+      tokens.append(SUBHEADER)
+      line = line[2:]
+    elif line.startswith("#"):
+      tokens.append(HEADER)
+      line = line[1:]
+    
     run = ""
     for char in line:
       run += char
       if run != "":
-        if processToken(run, tokens):
+        if processToken(run, tokens, False):
           run = ""
     
     if run != "":
-      processToken(run, tokens)
+      processToken(run, tokens, True)
     
-    tokens.append(HTML_NEWLINE)
+    tokens.append(RESET)
 
   # Parse Tokens into HTML
   print("--- Parsing to HTML")
+  
+  effects = {}
+  
+  for token in tokens:
+    if token in headers:
+      html.append(token.opener)
+      effects[token] = True
+    elif token == RESET:
+      for hd in headers:
+        if effects.get(hd, default = False):
+          html.append(hd.closer)
+          effects[hd] = False
+    elif token in wrappers:
+      if effects.get(token, default = False):
+        html.append(token.opener)
+        effects[token] = False
+      else:
+        html.append(token.closer)
+        effects[token] = True
+    elif token in simple:
+      html.append(token.tag)
+    
   
   # Finalise
   html += baseF
