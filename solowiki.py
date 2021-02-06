@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, shutil
 
 if sys.version_info[0] < 3:
     raise Exception("Outdated Python Version! Must be using Python 3")
@@ -32,11 +32,34 @@ def loadBase():
       base0 = data[0]
       baseF = data[1]
 
-for i in list(sys.argv)[1:]:
+def missingDirs(post): # create missing directories
+  postc = ""
+  for j in post.split("/")[:-1]:
+    postc += "/" + j
+  postc = postc[1:]
+  
+  try:
+    os.makedirs(postc)
+  except FileExistsError:
+    pass
+
+for i in list(sys.argv)[1:]: # for each provided file
   print("Resolving " + i)
   inpt = INPUT_DIR + i
   try:
-    with open(inpt if inpt.endswith(".md") else (inpt + ".md")) as source:
+    mdFile = inpt.endswith(".md")
+    if ("." in input and not mdFile): # if an asset
+      print("- File discovered to likely be an asset.")
+      # asset nonsense
+      if (os.path.exists(inpt)):
+        print("- Copying resource into bin.")
+        outputpath = OUTPUT_DIR + i
+        missingDirs(outputpath)
+        shutil.copyfile(inputpath, outputpath)
+      else:
+        print("- Asset not present Skipping file.")
+      continue #abuse the continue statement again
+    with open(inpt if mdFile else (inpt + ".md")) as source:
       md = source.read().splitlines()
   except FileNotFoundError:
     print("- Markdown Source not found.")
@@ -76,15 +99,7 @@ for i in list(sys.argv)[1:]:
   html += baseF
       
   post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
-  postc = ""
-  for j in post.split("/")[:-1]:
-    postc += "/" + j
-  postc = postc[1:]
-  
-  try:
-    os.makedirs(postc)
-  except FileExistsError:
-    pass
+  missingDirs(post)
   
   bin = open(post, "w+")
   bin.write(html)
