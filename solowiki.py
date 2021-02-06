@@ -55,7 +55,7 @@ for i in list(sys.argv)[1:]: # for each provided file
         print("- Copying resource into bin.")
         outputpath = OUTPUT_DIR + i
         missingDirs(outputpath)
-        shutil.copyfile(inputpath, outputpath)
+        shutil.copyfile(inpt, outputpath)
       else:
         print("- Asset not present Skipping file.")
       continue #abuse the continue statement again
