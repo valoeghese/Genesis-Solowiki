@@ -13,7 +13,7 @@ e # e
 ## Sub-Epicness
 
 This is funi. Lol. ''this is italic''. __this is underlined__. "this is fancy quoted." Also next sentence is on a new paragraph
-This sentence is on a new paragraph. It contains ''__**"nested"**__'' stuff. It also has a {otherpage|link}
+This sentence is on a new paragraph. It contains ''__**"nested"**__'' stuff. It also has a {otherpage.html|link}
 
 ### Sub Sub Epicness
 

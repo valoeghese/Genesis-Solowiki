@@ -71,7 +71,7 @@ RESET = Token("/R", False, None, None)
 headers = [HEADER, SUBHEADER, SUBHEADER_2, QUOTE, PARAHEADER]
 wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
 simple = [BREAK, LINK_START, LINK_MID, LINK_END]
-tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap
