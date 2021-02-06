@@ -45,7 +45,7 @@ def missingDirs(post): # create missing directories
 
 class Token:
   def __init__(self, dat, istext, opener, closer):
-    self.data = data
+    self.data = dat
     self.text = istext
     if closer == None:
       self.tag = opener
@@ -75,7 +75,7 @@ tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "> ": QUOTE, "!{": LINK_S
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap
   if currentRun in tokenmap:
-    tokenList.append(tokenmap[currentRun]
+    tokenList.append(tokenmap[currentRun])
     return True
   else:
     for tokenkey in tokenmap:
@@ -179,7 +179,9 @@ for i in list(sys.argv)[1:]: # for each provided file
   effects = {}
   
   for token in tokens:
-    if token in headers:
+    if token.text:
+      html.append(token.dat)
+    elif token in headers:
       html.append(token.opener)
       effects[token] = True
     elif token == RESET:
