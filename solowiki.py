@@ -180,17 +180,17 @@ for i in list(sys.argv)[1:]: # for each provided file
   
   for token in tokens:
     if token.text:
-      html += token.dat
+      html += token.data
     elif token in headers:
       html += token.opener
       effects[token] = True
     elif token == RESET:
       for hd in headers:
-        if effects.get(hd, default = False):
+        if effects.get(hd, False):
           html += hd.closer
           effects[hd] = False
     elif token in wrappers:
-      if effects.get(token, default = False):
+      if effects.get(token, False):
         html += token.opener
         effects[token] = False
       else:
