@@ -52,6 +52,17 @@ class Token:
     else:
       self.opener = opener
       self.closer = closer
+  
+  def getSimpleTag(self, effects):
+    return self.tag
+
+class LinkToken(Token):
+  def __init__(self, dat, tagLink, tagImage):
+    super().__init__(dat, False, tagLink, None)
+    self.imgtag = tagImage
+  
+  def getSimpleTag(self, effects):
+    return self.imgtag if effects.get(1, False) else super().getSimpleTag(effects)
 
 HEADER = Token("/H1", False, "<h1>", "</h1>")
 SUBHEADER = Token("/H2", False, "<h2>", "</h2>")
@@ -63,15 +74,16 @@ UNDERLINE = Token("/U", False, "<u>", "</u>")
 QUOTE = Token("/BQ", False, "<div class=\"quote\">&nbsp;<q>", "</q></div>")
 INLINE_QUOTE = Token("/IQ", False, "<q>", "</q>")
 LINK_START = Token("/LS", False, "<a href=\"", None)
-LINK_MID = Token("/LM", False, "\">", None)
-LINK_END = Token("/LE", False, "</a>", None)
+IMAGE_START = Token("/IS", False, "<img src=\"", None)
+LINK_MID = LinkToken("/LM", "\">", "\" alt=\"")
+LINK_END = LinkToken("/LE", "</a>", "\"/>")
 BREAK = Token("/NL", False, "<br/>", None)
 RESET = Token("/R", False, None, None)
 
 headers = [HEADER, SUBHEADER, SUBHEADER_2, QUOTE, PARAHEADER]
 wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
-simple = [BREAK, LINK_START, LINK_MID, LINK_END]
-tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "{": LINK_START, "|": LINK_MID, "}": LINK_END}
+simple = [BREAK, IMAGE_START, LINK_START, LINK_MID, LINK_END]
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "!{": IMAGE_START, "{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap
@@ -203,7 +215,13 @@ for i in list(sys.argv)[1:]: # for each provided file
         html += token.opener
         effects[token] = True
     elif token in simple:
-      html += token.tag
+      html += token.getSimpleTag(effects) # This method can be overrided. It is considered simple because it is a single tag, even if it changes on condition. Other tokens have a pair of tags.
+      
+      # Toggle Image Flag
+      if token == IMAGE_START:
+        effects[1] = True
+      elif effects.get(1, False) and token == LINK_END:
+        effects[1] = False
     
   
   # Finalise

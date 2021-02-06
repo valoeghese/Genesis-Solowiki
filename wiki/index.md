@@ -18,3 +18,7 @@ This sentence is on a new paragraph. It contains ''__**"nested"**__'' stuff. It 
 ### Sub Sub Epicness
 
 Why
+
+!{logo.png|Logo} This is an image.
+
+{otherpage.html|!{logo.png|Logo}} This is an image link. You can only nest this as an image within a link.
