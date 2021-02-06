@@ -43,6 +43,9 @@ def missingDirs(post): # create missing directories
   except FileExistsError:
     pass
 
+def processToken(currentRun, tokenList):
+  pass
+
 for i in list(sys.argv)[1:]: # for each provided file
   print("Resolving " + i)
   inpt = INPUT_DIR + i
@@ -52,12 +55,12 @@ for i in list(sys.argv)[1:]: # for each provided file
       print("- File discovered to likely be an asset.")
       # asset nonsense
       if (os.path.exists(inpt)):
-        print("- Copying resource into bin.")
+        print("--- Copying resource into bin.")
         outputpath = OUTPUT_DIR + i
         missingDirs(outputpath)
         shutil.copyfile(inpt, outputpath)
       else:
-        print("- Asset not present Skipping file.")
+        print("--- Asset not present Skipping file.")
       continue #abuse the continue statement again
     with open(inpt if mdFile else (inpt + ".md")) as source:
       md = source.read().splitlines()
@@ -69,9 +72,9 @@ for i in list(sys.argv)[1:]: # for each provided file
       a = input("- Bin HTML file found. Permanently Delete file? [Y/N] ")
       if (a.upper() == "Y"):
         os.remove(post)
-      print("- Deleted file.")
+      print("--- Deleted file.")
     else:
-      print("- Bin does not exist, cannot act on the given file.")
+      print("--- Bin does not exist, cannot act on the given file.")
     continue
   
   print("- Transpiling " + i)
@@ -86,28 +89,35 @@ for i in list(sys.argv)[1:]: # for each provided file
   html = base0Split[0] + metadata[1].strip() + base0Split[1] + "<h1 id=\"title\">" + metadata[0].strip() + "</h1>" + "\n"
   
   newLines = False
+  tokens = []
   
+  # Tokenise
+  print("--- Tokenising")
   for line in md[1:]:
     sline = line.strip()
     
     if line == "":
       if newLines:
-        html += baseI + "<br/>\n"
+        tokens.append("/NL") # NewLine
       newLines = True
       continue # yes I am abusing continue statement deal with it
     else:
       newLines = False
     
-    # basic stuff will be done better with tokens later
-    if (sline.startswith("###")):
-      html += baseI + ("<h3>" + sline[3:].strip() + "</h3>")
-    elif (sline.startswith("##")):
-      html += baseI + ("<h2>" + sline[2:].strip() + "</h3>")
-    elif (sline.startswith("#")):
-      html += baseI + ("<h1>" + sline[1:].strip() + "</h1>")
-    else:
-      html += baseI + ("<p>" + sline+ "</p>")
-    html += "\n"
+    run = ""
+    for char in line:
+      run += char
+      if run != "":
+        if processToken(run, tokens):
+          run = ""
+    
+    if run != "":
+      processToken(run, tokens)
+    
+    tokens.append("/HNL") # Html NewLine
+
+  # Parse Tokens into HTML
+  print("--- Parsing to HTML")
   html += baseF
       
   post = OUTPUT_DIR + (i[:-3] if i.endswith(".md") else i) + ".html"
