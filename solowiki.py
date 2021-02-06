@@ -57,6 +57,7 @@ HEADER = Token("/H1", False, "<h1>", "</h1>")
 SUBHEADER = Token("/H2", False, "<h2>", "</h2>")
 SUBHEADER_2 = Token("/H3", False, "<h3>", "</h3>")
 SUBHEADER_3 = Token("/H4", False, "<h4>", "</h4>")
+PARAHEADER = Token("/P", False, "<p>", "</p>")
 BOLD = Token("/B", False, "<b>", "</b>")
 ITALIC = Token("/I", False, "<i>", "</i>")
 UNDERLINE = Token("/U", False, "<u>", "</u>")
@@ -160,6 +161,8 @@ for i in list(sys.argv)[1:]: # for each provided file
     elif line.startswith("#"):
       tokens.append(HEADER)
       line = line[1:]
+    else:
+      tokens.append(PARAHEADER)
     
     run = ""
     for char in line:
@@ -177,6 +180,8 @@ for i in list(sys.argv)[1:]: # for each provided file
   print("--- Parsing to HTML")
   
   effects = {}
+  
+  html += baseI
   
   for token in tokens:
     if token.text:
