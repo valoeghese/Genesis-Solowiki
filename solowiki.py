@@ -82,7 +82,7 @@ def processToken(currentRun, tokenList, forceToken):
     for tokenkey in tokenmap:
       if currentRun.endswith(tokenkey):
         cutoffsize = len(tokenkey)
-        tokenList.append(Token(tokenkey[:-cutoffsize], True, None, None)) # add preceding text
+        tokenList.append(Token(currentRun[:-cutoffsize], True, None, None)) # add preceding text
         tokenList.append(tokenmap[tokenkey]) # add token
         return True
     if forceToken: # if force token make a text token
