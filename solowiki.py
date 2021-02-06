@@ -55,8 +55,7 @@ class Token:
 
 HEADER = Token("/H1", False, "<h1>", "</h1>")
 SUBHEADER = Token("/H2", False, "<h2>", "</h2>")
-SUBHEADER_2 = Token("/H3", False, "<h3>", "</h3>")
-SUBHEADER_3 = Token("/H4", False, "<h4>", "</h4>")
+SUBHEADER_2 = Token("/H3", False, "<b>", "</b><br/>")
 PARAHEADER = Token("/P", False, "<p>", "</p>")
 BOLD = Token("/B", False, "<b>", "</b>")
 ITALIC = Token("/I", False, "<i>", "</i>")
@@ -69,7 +68,7 @@ LINK_END = Token("/LE", False, "</a>", None)
 BREAK = Token("/NL", False, "<br/>", None)
 RESET = Token("/R", False, None, None)
 
-headers = [HEADER, SUBHEADER, SUBHEADER_2, SUBHEADER_3, QUOTE, PARAHEADER]
+headers = [HEADER, SUBHEADER, SUBHEADER_2, QUOTE, PARAHEADER]
 wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
 simple = [BREAK, LINK_START, LINK_MID, LINK_END]
 tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "!{": LINK_START, "|": LINK_MID, "}": LINK_END}
@@ -150,10 +149,7 @@ for i in list(sys.argv)[1:]: # for each provided file
     else:
       newLines = False
     
-    if line.startswith("####"):
-      tokens.append(SUBHEADER_3)
-      line = line[4:].strip()
-    elif line.startswith("###"):
+    if line.startswith("###"):
       tokens.append(SUBHEADER_2)
       line = line[3:].strip()
     elif line.startswith("##"):
