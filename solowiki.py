@@ -61,7 +61,7 @@ PARAHEADER = Token("/P", False, "<p>", "</p>")
 BOLD = Token("/B", False, "<b>", "</b>")
 ITALIC = Token("/I", False, "<i>", "</i>")
 UNDERLINE = Token("/U", False, "<u>", "</u>")
-QUOTE = Token("/BQ", False, "<div class=\"quote\"><q>", "</q></div>")
+QUOTE = Token("/BQ", False, "<div class=\"quote\">&nbsp;<q>", "</q></div>")
 INLINE_QUOTE = Token("/IQ", False, "<q>", "</q>")
 LINK_START = Token("/LS", False, "<a href=\"", None)
 LINK_MID = Token("/LM", False, "\">", None)
@@ -152,19 +152,19 @@ for i in list(sys.argv)[1:]: # for each provided file
     
     if line.startswith("####"):
       tokens.append(SUBHEADER_3)
-      line = line[4:]
+      line = line[4:].strip()
     elif line.startswith("###"):
       tokens.append(SUBHEADER_2)
-      line = line[3:]
+      line = line[3:].strip()
     elif line.startswith("##"):
       tokens.append(SUBHEADER)
-      line = line[2:]
+      line = line[2:].strip()
     elif line.startswith("#"):
       tokens.append(HEADER)
-      line = line[1:]
+      line = line[1:].strip()
     elif line.startswith(">"):
       tokens.append(QUOTE)
-      line = line[1:]
+      line = line[1:].strip()
     else:
       tokens.append(PARAHEADER)
     
