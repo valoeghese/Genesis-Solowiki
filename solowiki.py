@@ -72,7 +72,6 @@ BOLD = Token("/B", False, "<b>", "</b>")
 ITALIC = Token("/I", False, "<i>", "</i>")
 UNDERLINE = Token("/U", False, "<u>", "</u>")
 QUOTE = Token("/BQ", False, "<div class=\"quote\">&nbsp;<q>", "</q></div>")
-INLINE_QUOTE = Token("/IQ", False, "<q>", "</q>")
 LINK_START = Token("/LS", False, "<a href=\"", None)
 IMAGE_START = Token("/IS", False, "<img src=\"", None)
 LINK_MID = LinkToken("/LM", "\">", "\" alt=\"")
@@ -81,9 +80,9 @@ BREAK = Token("/NL", False, "<br/>", None)
 RESET = Token("/R", False, None, None)
 
 headers = [HEADER, SUBHEADER, SUBHEADER_2, QUOTE, PARAHEADER]
-wrappers = [BOLD, ITALIC, UNDERLINE, INLINE_QUOTE]
+wrappers = [BOLD, ITALIC, UNDERLINE]
 simple = [BREAK, IMAGE_START, LINK_START, LINK_MID, LINK_END]
-tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "\"": INLINE_QUOTE, "!{": IMAGE_START, "{": LINK_START, "|": LINK_MID, "}": LINK_END}
+tokenmap = {"**": BOLD, "''": ITALIC, "__": UNDERLINE, "!{": IMAGE_START, "{": LINK_START, "|": LINK_MID, "}": LINK_END}
 
 def processToken(currentRun, tokenList, forceToken):
   global tokenmap
